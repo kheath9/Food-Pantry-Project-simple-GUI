@@ -1,5 +1,59 @@
 import tkinter as tk
 
+food_donations = []
+money_donations = []
+food_distribution = []
+
+# MOCK FUNCTIONS
+def add_food():
+    item = food_entry.get()
+    quantity = food_quantity_entry.get()
+    donor = food_donor_entry.get()
+    if item and quantity and donor:
+      # Adds to food_donations list
+        food_donations.append((donor, item, quantity))
+      # Deletes previous entries from entry box
+        food_entry.delete(0, tk.END)
+        food_quantity_entry.delete(0, tk.END)
+        food_donor_entry.delete(0, tk.END)
+
+def add_money():
+    amount = money_entry.get()
+    donor = money_donor_entry.get()
+    if amount and donor:
+        money_donations.append((amount, donor))
+        money_entry.delete(0, tk.END)
+        money_donor_entry.delete(0,tk.END)
+
+def record_distribution():
+    household = household_entry.get()
+    item = distribute_item_entry.get()
+    quantity = distribute_quantity_entry.get()
+    if household and item and quantity:
+        food_distribution.append((household, item, quantity))
+        household_entry.delete(0, tk.END)
+        distribute_item_entry.delete(0, tk.END)
+        distribute_quantity_entry.delete(0, tk.END)
+
+def view_distributions_inventory():
+  # Creates a new popup window
+    log_window = tk.Toplevel(root)
+    log_window.title("Donation Logs")
+    log_window.geometry("200x400")
+    tk.Label(log_window, text="Food Donations", font=("Arial", 10, "bold")).pack(pady=5)
+  # Adds label with data from the food, money, and distributions lists
+    for donor, item, qty in food_donations:
+        tk.Label(log_window, text=f"{donor}: {qty} of {item}").pack(anchor="w")
+    tk.Label(log_window, text="Money Donations", font=("Arial", 10, "bold")).pack(pady=5)
+    for donor, amount in money_donations:
+        tk.Label(log_window, text=f"{donor}: ${amount}").pack(anchor="w")
+    tk.Label(log_window, text="Distributions", font=("Arial", 10, "bold")).pack(pady=5)
+    for household, item, qty in food_distribution:
+        tk.Label(log_window, text=f"{household}: {qty} of {item}").pack(anchor="w")
+
+
+
+# GUI
 
 root = tk.Tk()
 root.title("Food Pantry App")
@@ -31,8 +85,8 @@ tk.Label(root, text="Amount:").grid(row=3, column=0, sticky="e")
 food_quantity_entry = tk.Entry(root)
 food_quantity_entry.grid(row=3, column=1, padx=10, pady=10)
 
-# Food donation add button, command = 'None' for now
-tk.Button(root, text="Add Food Donation", command=None).grid(row=4, column=0,
+# Food donation add button, command = add_food
+tk.Button(root, text="Add Food Donation", command=add_food).grid(row=4, column=0,
                                                              columnspan=2, pady=5)
 
 # MONEY DONATION LABELS, ENTRY BOXES, AND BUTTONS
@@ -53,8 +107,8 @@ tk.Label(root, text="Amount ($):").grid(row=7, column=0, sticky="e")
 money_entry = tk.Entry(root)
 money_entry.grid(row=7, column=1, pady=10)
 
-# Money donation button, command = 'None' for now
-tk.Button(root, text="Add Money Donation", command=None).grid(row=8, column=0,
+# Money donation button, command = add_money
+tk.Button(root, text="Add Money Donation", command=add_money).grid(row=8, column=0,
                                                               columnspan=2, pady=5)
 
 # FOOD DISTRIBUTION LABELS, ENTRY, AND BUTTONS
@@ -78,19 +132,18 @@ tk.Label(root, text="Quantity:").grid(row=12, column=0, sticky="e")
 distribute_quantity_entry = tk.Entry(root)
 distribute_quantity_entry.grid(row=12, column=1, pady=10)
 
-# Button to record distributions, command = 'None' for now
-tk.Button(root, text="Record Distribution", command=None).grid(row=13, column=0,
+# Button to record distributions, command = record_distribution
+tk.Button(root, text="Record Distribution", command=record_distribution).grid(row=13, column=0,
                                                                columnspan=2, pady=5)
 
-# Button to view distributions, command = 'None' for now
-tk.Button(root, text="View Distributions", command=None).grid(row=14, column=0,
+# Button to view distributions, command = view_distributions_inventory
+tk.Button(root, text="View Inventory & Distributions", command=view_distributions_inventory).grid(row=14, column=0,
                                                               columnspan=2, pady=10)
 
-# Button to view inventory, command = 'None' for now
-tk.Button(root, text="View Inventory", command=None).grid(row=15, column=0,
-                                                           columnspan=2, pady=5)
-
 root.mainloop()
+
+
+
 
 
 
